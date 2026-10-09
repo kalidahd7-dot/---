@@ -91,3 +91,4 @@ async function main() {
 main()
   .then(() => prisma.$disconnect())
   .catch((e) => { console.error(e); prisma.$disconnect(); process.exit(1); });
+{ code: 'RECITERS', titleAr: 'القرّاء', titleAm: 'ቀሪኦች', titleEn: 'Reciters', sortOrder: 7 },
