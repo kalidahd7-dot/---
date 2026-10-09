@@ -1,0 +1,14 @@
+{
+  "name": "imam-aljazari-bot",
+  "version": "1.0.0",
+  "description": "Multilingual Telegram bot for Maqra'at Al-Imam Al-Jazari",
+  "main": "index.js",
+  "scripts": {"start": "node index.js", "check": "node --check index.js && node --check locales.js && node --check schedules.js"},
+  "engines": {"node": ">=20"},
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.1",
+    "telegraf": "^4.16.3"
+  }
+}
