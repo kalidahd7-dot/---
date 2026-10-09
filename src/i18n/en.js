@@ -128,3 +128,45 @@ export default {
   admin_broadcast_ask: 'Send the announcement text (Markdown supported).',
   admin_broadcast_sent: '✅ Announcement sent to {count} users.',
 };
+rc_title: '💳 Recharge Balance',
+rc_choose_package: 'Choose a package:',
+rc_selected: '✅ Selected: {minutes} minutes — {price} ETB',
+rc_pay_header: '💠 *Payment Details*\nPlease transfer the amount and send the receipt photo here.',
+rc_pay_telebirr: '📱 Telebirr: {number}\n👤 Name: {name}',
+rc_pay_bank: '🏦 Bank: {bank}\n💳 Account: {account}\n👤 Holder: {holder}',
+rc_await_receipt: '📸 Send the receipt photo now, or /cancel to abort.',
+rc_receipt_too_big: '⚠️ Image too large. Please send one under 5MB.',
+rc_receipt_received:
+  '✅ Receipt received.\nRequest code: *{code}*\nIt will be reviewed by admin and you will be notified.',
+rc_pending_exists:
+  '⚠️ You already have a pending recharge request *{code}*. Please wait.',
+rc_forwarded_supervisor:
+  '🔔 *New Recharge Request*\nCode: {code}\nStudent: {name} ({studentCode})\nPackage: {minutes} min\nAmount: {price} ETB\n\nApprove: /approve {code}\nReject: /reject {code}',
+rc_approved_student:
+  '✅ Your request *{code}* was approved.\n{minutes} minutes added to your balance.\nNew balance: *{balance}* minutes.',
+rc_rejected_student:
+  '❌ Your recharge *{code}* was rejected.\nReason: {reason}\nPlease contact admin.',
+rc_rejected_no_reason:
+  '❌ Your recharge *{code}* was rejected.\nPlease contact admin.',
+rc_cancelled: 'Recharge cancelled.',
+rc_no_packages: 'No packages available.',
+rc_not_registered_recharge: '⚠️ Please register first. Press /start.',
+rc_invalid_package: '⚠️ Invalid package.',
+rc_choose_again: '↩️ Choose another package',
+rc_contact_admin: '☎️ Contact Administration',
+
+loan_warning_low: '⚠️ Your balance is low ({balance} min). Please recharge.',
+loan_warning_zero: '⚠️ Your balance reached zero. You may continue up to a {max}-min loan.',
+loan_warning_near_limit: '🚫 You are approaching the loan limit ({max} min). Please recharge.',
+loan_limit_reached:
+  '🚫 You exceeded the loan limit. You have been restricted in your group until settled.',
+
+admin_approve_usage: 'Usage: /approve TOP-000001',
+admin_reject_usage: 'Usage: /reject TOP-000001 [reason]',
+admin_payment_already: '⚠️ This request was already processed ({status}).',
+admin_payment_not_found: '❌ Payment {code} not found.',
+admin_approve_done:
+  '✅ Request *{code}* approved. Added {minutes} minutes to {studentCode}.',
+admin_reject_done: '❌ Request *{code}* rejected.',
+admin_receipt_caption:
+  '🧾 Receipt for {code}\nStudent: {name}\nPackage: {minutes} min\nAmount: {price} ETB',
