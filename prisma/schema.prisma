@@ -1,0 +1,314 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============= USERS & STUDENTS =============
+
+model User {
+  id             String   @id @default(cuid())
+  telegramId     BigInt   @unique
+  username       String?
+  firstName      String?
+  lastName       String?
+  language       String   @default("ar") // ar | am | en
+  isBlocked      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  student        Student?
+  supervisor     Supervisor?
+  notifications  Notification[]
+  auditLogs      AuditLog[]
+
+  @@index([language])
+}
+
+model Student {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  code           String   @unique            // e.g. IF-0021
+  fullName       String
+  age            Int?
+  gender         String                     // MALE | FEMALE
+  country        String?
+  city           String?
+  phone          String?
+  readingLevel   String                     // BEGINNER | INTERMEDIATE | ADVANCED
+
+  // Previous study
+  hasPreviousStudy Boolean @default(false)
+  prevSchool       String?
+  prevCity         String?
+  prevTeacher      String?
+  prevDuration     String?
+  prevContent      String?
+
+  programId      String?
+  enrollmentStatus String @default("PENDING") // PENDING | ACTIVE | SUSPENDED | COMPLETED
+
+  groupId        String?
+  period         String?                    // MORNING | AFTERNOON | NIGHT
+
+  balanceMinutes Int      @default(0)
+  loanMinutes    Int      @default(0)
+  totalPurchased Int      @default(0)
+  totalFree      Int      @default(0)
+  totalUsed      Int      @default(0)
+
+  examFrequency  String?  // WEEKLY | BIWEEKLY
+  examAmount     String?  // J5 | J10 | J15 | FULL
+  nextExamAt     DateTime?
+  examStatus     String   @default("NONE") // NONE | UPCOMING | DUE | OVERDUE
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  program        Program? @relation(fields: [programId], references: [id])
+  group          Group?   @relation(fields: [groupId], references: [id])
+
+  sessions       Session[]
+  ledger         BalanceLedger[]
+  payments       PaymentRequest[]
+  exams          Exam[]
+  restrictions   Restriction[]
+
+  @@index([groupId])
+  @@index([programId])
+  @@index([enrollmentStatus])
+}
+
+model Supervisor {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  displayName  String
+  role         String   @default("SUPERVISOR") // ADMIN | SUPERVISOR | EXAMINER
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ============= PROGRAMS & GROUPS =============
+
+model Program {
+  id          String   @id @default(cuid())
+  code        String   @unique  // TALQIN | HIFZ | IJAZAH_HAFS
+  titleAr     String
+  titleAm     String
+  titleEn     String
+  descAr      String
+  descAm      String
+  descEn      String
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  students    Student[]
+}
+
+model Group {
+  id          String   @id @default(cuid())
+  code        String   @unique // MALE_MORNING, ...
+  gender      String              // MALE | FEMALE
+  period      String              // MORNING | AFTERNOON | NIGHT
+  daysOfWeek  Int[]               // 0=Sun ... 6=Sat  (Tue=2, Wed=3, Thu=4, Sat=6, Sun=0, Mon=1)
+  startTime   String              // "09:00"
+  endTime     String              // "12:00"
+  telegramId  BigInt?
+  titleAr     String
+  titleAm     String
+  titleEn     String
+
+  students    Student[]
+}
+
+// ============= SESSIONS & LEDGER =============
+
+model Session {
+  id            String   @id @default(cuid())
+  studentId     String
+  minutes       Int
+  supervisorId  String?
+  note          String?
+  createdAt     DateTime @default(now())
+
+  student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+model BalanceLedger {
+  id             String   @id @default(cuid())
+  studentId      String
+  type           String   // WELCOME_BONUS | PACKAGE_PURCHASE | SESSION_DEDUCTION | ADMIN_ADJUSTMENT | REFUND | LOAN_USAGE
+  amountMinutes  Int      // positive or negative
+  previousBalance Int
+  newBalance     Int
+  actorId        String?
+  reference      String?
+  note           String?
+  createdAt      DateTime @default(now())
+
+  student        Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([type])
+}
+
+model Package {
+  id           String   @id @default(cuid())
+  code         String   @unique // PKG_100 ...
+  minutes      Int
+  priceEtb     Int
+  isActive     Boolean  @default(true)
+  sortOrder    Int      @default(0)
+}
+
+// ============= PAYMENTS =============
+
+model PaymentRequest {
+  id          String   @id @default(cuid())
+  code        String   @unique // TOP-000001
+  studentId   String
+  packageId   String
+  minutes     Int
+  priceEtb    Int
+  status      String   @default("PENDING") // PENDING | APPROVED | REJECTED | EXPIRED
+  receiptFileId String?
+  reviewedById String?
+  reviewedAt  DateTime?
+  note        String?
+  createdAt   DateTime @default(now())
+
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([status])
+}
+
+// ============= EXAMS =============
+
+model Exam {
+  id          String   @id @default(cuid())
+  studentId   String
+  scheduledAt DateTime
+  status      String   @default("UPCOMING") // UPCOMING | DUE | OVERDUE | DONE
+  amount      String   // J5 | J10 | J15 | FULL
+  createdAt   DateTime @default(now())
+
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  attempts    ExamAttempt[]
+
+  @@index([studentId])
+  @@index([status])
+}
+
+model ExamAttempt {
+  id          String   @id @default(cuid())
+  examId      String
+  examinerId  String?
+  result      String   // PASS | FAIL | PARTIAL
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  exam        Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+}
+
+// ============= RESTRICTIONS =============
+
+model Restriction {
+  id          String   @id @default(cuid())
+  studentId   String
+  reason      String   // EXAM_OVERDUE | LOAN_LIMIT | ADMIN_MANUAL
+  isActive    Boolean  @default(true)
+  createdById String?
+  note        String?
+  createdAt   DateTime @default(now())
+  removedAt   DateTime?
+
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([isActive])
+}
+
+// ============= RESOURCES (educational content) =============
+
+model ResourceCategory {
+  id          String   @id @default(cuid())
+  code        String   @unique // TAJWEED | QIRAAT | HIFZ | TALQIN | ARABIC | SUPPORT
+  titleAr     String
+  titleAm     String
+  titleEn     String
+  sortOrder   Int      @default(0)
+
+  resources   Resource[]
+}
+
+model Resource {
+  id           String   @id @default(cuid())
+  categoryId   String
+  type         String   // BOOK | PDF | WEBSITE | AUDIO | YOUTUBE | PLAYLIST
+  titleAr      String
+  titleAm      String
+  titleEn      String
+  descAr       String?
+  descAm       String?
+  descEn       String?
+  url          String?
+  author       String?
+  teacher      String?
+  lessonNumber Int?
+  parentId     String?
+  isActive     Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  category     ResourceCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId])
+  @@index([type])
+}
+
+// ============= NOTIFICATIONS & AUDIT =============
+
+model Notification {
+  id         String   @id @default(cuid())
+  userId     String
+  type       String
+  payload    Json?
+  sentAt     DateTime @default(now())
+  success    Boolean  @default(true)
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String
+  target     String?
+  meta       Json?
+  createdAt  DateTime @default(now())
+
+  user       User?    @relation(fields: [userId], references: [id])
+
+  @@index([action])
+  @@index([createdAt])
+}
+
+// ============= SETTINGS =============
+
+model Settings {
+  key        String   @id
+  value      String
+  updatedAt  DateTime @updatedAt
+}
