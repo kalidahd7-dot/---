@@ -29,3 +29,13 @@
   }
 }
 "prisma:seed": "node prisma/seed.js"
+"scripts": {
+  "test": "node --test tests/",
+  "test:watch": "node --test --watch tests/",
+  "lint": "eslint .",
+  "ci": "npm ci && npx prisma generate && npm test"
+},
+"devDependencies": {
+  "prisma": "^5.20.0",
+  "eslint": "^9.12.0"
+}
