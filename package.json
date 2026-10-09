@@ -1,14 +1,30 @@
 {
-  "name": "imam-aljazari-bot",
+  "name": "jazari-center-bot",
   "version": "1.0.0",
-  "description": "Multilingual Telegram bot for Maqra'at Al-Imam Al-Jazari",
+  "description": "Imam Al-Jazari Center for Quran Recitation & Ijazah — multilingual Telegram bot",
+  "type": "module",
   "main": "index.js",
-  "scripts": {"start": "node index.js", "check": "node --check index.js && node --check locales.js && node --check schedules.js"},
-  "engines": {"node": ">=20"},
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:studio": "prisma studio",
+    "test": "node --test tests/"
+  },
   "dependencies": {
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "pg": "^8.13.1",
+    "@prisma/client": "^5.20.0",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.4.5",
+    "node-cron": "^3.0.3",
+    "pino": "^9.4.0",
+    "pino-pretty": "^11.2.2",
     "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "prisma": "^5.20.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
