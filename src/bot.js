@@ -26,3 +26,11 @@ export function createBot() {
 
   return bot;
 }
+import { registerRechargeHandlers } from './handlers/recharge.js';
+import { registerContentHandlers } from './handlers/content.js';
+import { registerAdminContentHandlers } from './handlers/adminContent.js';
+
+// داخل createBot() بعد registerAdminHandlers:
+registerRechargeHandlers(bot);
+registerContentHandlers(bot);
+registerAdminContentHandlers(bot);
