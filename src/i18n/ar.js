@@ -141,3 +141,50 @@ export default {
   admin_broadcast_ask: 'أرسل نص الإعلان (يدعم Markdown).',
   admin_broadcast_sent: '✅ تم إرسال الإعلان إلى {count} مستخدم.',
 };
+
+// ===== recharge wizard =====
+rc_title: '💳 تعبئة الرصيد',
+rc_choose_package: 'اختر الباقة المناسبة:',
+rc_selected: '✅ اخترت الباقة: {minutes} دقيقة — {price} بر',
+rc_pay_header: '💠 *تفاصيل الدفع*\nيرجى تحويل المبلغ ثم إرسال صورة الإيصال هنا.',
+rc_pay_telebirr: '📱 Telebirr: {number}\n👤 الاسم: {name}',
+rc_pay_bank: '🏦 البنك: {bank}\n💳 الحساب: {account}\n👤 الاسم: {holder}',
+rc_await_receipt: '📸 أرسل صورة الإيصال الآن، أو /cancel للإلغاء.',
+rc_receipt_too_big: '⚠️ حجم الصورة كبير. الرجاء إرسال صورة أصغر من 5MB.',
+rc_receipt_received:
+  '✅ تم استلام إيصالك.\nرقم الطلب: *{code}*\nسيتم مراجعته من الإدارة وإشعارك بالنتيجة.',
+rc_pending_exists:
+  '⚠️ لديك طلب تعبئة قيد المراجعة برقم *{code}*. يرجى الانتظار حتى يتم البت فيه.',
+rc_forwarded_supervisor:
+  '🔔 *طلب تعبئة جديد*\nرقم الطلب: {code}\nالطالب: {name} ({studentCode})\nالباقة: {minutes} دقيقة\nالمبلغ: {price} بر\n\nللموافقة: /approve {code}\nللرفض: /reject {code}',
+rc_approved_student:
+  '✅ تمت الموافقة على طلبك *{code}*.\nتمت إضافة {minutes} دقيقة إلى رصيدك.\nالرصيد الجديد: *{balance}* دقيقة.',
+rc_rejected_student:
+  '❌ تم رفض طلب التعبئة *{code}*.\nالسبب: {reason}\nيرجى التواصل مع الإدارة للمزيد.',
+rc_rejected_no_reason:
+  '❌ تم رفض طلب التعبئة *{code}*.\nيرجى التواصل مع الإدارة للمزيد.',
+rc_cancelled: 'تم إلغاء عملية التعبئة.',
+rc_no_packages: 'لا توجد باقات متاحة حاليًا.',
+rc_not_registered_recharge: '⚠️ يجب التسجيل أولًا قبل تعبئة الرصيد. اضغط /start.',
+rc_invalid_package: '⚠️ الباقة غير صحيحة.',
+rc_choose_again: '↩️ اختر باقة أخرى',
+rc_contact_admin: '☎️ التواصل مع الإدارة',
+
+// ===== loan warnings =====
+loan_warning_low: '⚠️ رصيدك منخفض ({balance} دقيقة). يرجى التعبئة لتفادي التوقف.',
+loan_warning_zero: '⚠️ وصل رصيدك إلى الصفر. يمكنك الاستمرار ضمن حد السلف {max} دقيقة.',
+loan_warning_near_limit:
+  '🚫 أنت تقترب من حد السلف ({max} دقيقة). يرجى التعبئة الفورية.',
+loan_limit_reached:
+  '🚫 لقد تجاوزت حد السلف. تم تقييد حسابك في المجموعة حتى تسوية الرصيد.',
+
+// ===== admin payments =====
+admin_approve_usage: 'الاستخدام: /approve TOP-000001',
+admin_reject_usage: 'الاستخدام: /reject TOP-000001 [سبب]',
+admin_payment_already: '⚠️ هذا الطلب تمت معالجته مسبقًا ({status}).',
+admin_payment_not_found: '❌ لم يتم العثور على الطلب {code}.',
+admin_approve_done:
+  '✅ تمت الموافقة على الطلب *{code}* وإضافة {minutes} دقيقة للطالب {studentCode}.',
+admin_reject_done: '❌ تم رفض الطلب *{code}*.',
+admin_receipt_caption:
+  '🧾 إيصال الطلب {code}\nالطالب: {name}\nالباقة: {minutes} دقيقة\nالمبلغ: {price} بر',
