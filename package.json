@@ -28,3 +28,4 @@
     "node": ">=20"
   }
 }
+"prisma:seed": "node prisma/seed.js"
